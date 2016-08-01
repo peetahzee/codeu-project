@@ -24,7 +24,7 @@ public class JedisMaker {
 	public static Jedis make() throws IOException {
 		
 		//TODO get RedisToGo URL and set up file directory
-		String filename = redis_url.txt;
+		String filename = "redis_url.txt";
 		URL fileURL = JedisMaker.class.getClassLoader().getResource(filename);
 
 	  StringBuilder sb = new StringBuilder();
