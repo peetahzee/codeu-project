@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Random;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -162,7 +163,18 @@ public class BuzzfeedCrawler {
         return map;
     }
 
+
+    /**
+    * Returns URL at a random position
+    */
+    public String grabRandomURL(ArrayList GIFlist) {
+        int size = GIFlist.size();
+        Random randomGenerator = new Random();
+        int randomPosition = randomGenerator.nextInt(size);
+        return GIFlist.get(randomPosition);
+    }
     
+
     public static void main(String[] args) throws IOException {
         
         // make a BuzzfeedCrawler
@@ -184,10 +196,16 @@ public class BuzzfeedCrawler {
             // break;
         } while (res == null);
         
-        //TODO get user input
-        //TODO return random URL from map
-        Map<String, ArrayList> map = index.getGifURLs("");
-        
+            //TODO get user input
+            
+            for each term input {
+               Map<String, ArrayList> map = index.getGifURLs(input); 
+               ArrayList<String> GIFlist = new ArrayList<String>;
+               GIFlist = map.get(input);
+               String gifURL = grabRandomURL(GIFlist);
+            }
+
+    
         }
     }
 }
