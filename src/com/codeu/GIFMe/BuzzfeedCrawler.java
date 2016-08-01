@@ -138,16 +138,29 @@ public class BuzzfeedCrawler {
     }
 
 
+    /**
+     * Adds a URL to the set associated with `term`.
+     * 
+     * @param term
+     * @param gifURL
+     */
+    public void addGifURL(String term, String gifURL) {
+        jedis.sadd(urlSetKey(term), gifURL);
+    }
+
+
     public Set<String> getGifURLs(String term) {
         Set<String> set = jedis.smembers(urlSetKey(term));
         return set;
     }
 
+
+
     /**
      * Looks up a term and returns a map from term to ArrayList of GIF URLs.
      * 
      * @param term
-     * @return Map from URL to count.
+     * @return Map from term to GIF URL
      */
     public Map<String, ArrayList> getGIFList(String term) {
         Map<String, ArrayList> map = new HashMap<String, ArrayList>();
