@@ -10,6 +10,8 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 
+
+
 /**
  * Encapsulates a map from search term to frequency (count).
  * 
@@ -20,10 +22,12 @@ public class TermCounter {
 	
 	private Map<String, Integer> map;
 	private String label;
+	private String[] keywords;
 	
 	public TermCounter(String label) {
 		this.label = label;
 		this.map = new HashMap<String, Integer>();
+		this.keywords = new String[5];
 	}
 	
 	public String getLabel() {
@@ -102,6 +106,12 @@ public class TermCounter {
 	 */
 	public void put(String term, int count) {
 		map.put(term, count);
+		for(int i = 0; i < 5; ++i){
+           	if(map.get(term) > map.get(keywords[i])){
+            	keywords[i] = term;
+               	break;
+            }
+        }
 	}
 
 	/**

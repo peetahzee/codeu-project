@@ -92,27 +92,22 @@ public class BuzzfeedCrawler {
      *
      * @param url
      */
-    void storeGifs(String url, Elements paragraphs){
-        //get the keywords and store them in a temporary array
-        String keywords = paragraphs.select("meta[name=keywords]").first().attr("content");
-        keywords.replace(",", "");
-        String arr[] = keywords.split(" ");
-       
-        BufferedImage image = null;
+    void storeGifs(String url, Elements images){
+        //get the top 5 keywords on the page
+        TermCounter tc = new TermCounter(url);
         
-        //for each paragraph of the webpapge
-        for(Element paragraph: paragraphs){
-            //store the gif
-            File outputFile = new File("animation.gif");
-            image = ImageIO.read(url);
-            ImageIO.write(image, "gif" outputFile);
-            
-            //add the image to each keyword
-            for(String word : arr){
-                //store the word + image
+        
+        //store the gif with each keyword
+        for(Element el : images){
+            String url = el.attribute(“src”);
+            if(url.contains(“gif”){
+                for(int i = 0; i < 5; ++i){     
+                    jedis.add(terms[i], url);
+                }
             }
         }
     }
+
     
     /**
      * Parses paragraphs and adds internal links to the queue.

@@ -55,12 +55,15 @@ public class BuzzfeedFetcher {
 		// read the file
 		InputStream stream = BuzzfeedFetcher.class.getClassLoader().getResourceAsStream(filename);
 		Document doc = Jsoup.parse(stream, "UTF-8", filename);
+		
+		//select all of the images on the page
+		Element images = doc.select(“img”);
 
-		// TODO: factor out the following repeated code
-		Element content = doc.getElementById("mw-content-text");
-		Elements paras = content.select("img[src~=(?i)\\.(gif)]");//ALSO include "video" tag
-		return paras;
+		//Element content = doc.getElementById("mw-content-text");
+		//Elements paras = content.select("img[src~=(?i)\\.(gif)]");//ALSO include "video" tag
+		return images;
 	}
+
 
 	/**
 	 * Rate limits by waiting at least the minimum interval between requests.
