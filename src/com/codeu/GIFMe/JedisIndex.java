@@ -195,24 +195,6 @@ public class JedisIndex {
 	}
 
 	/**
-	 * @param args
-	 * @throws IOException 
-	 */
-	public static void main(String[] args) throws IOException {
-		Jedis jedis = JedisMaker.make();
-		JedisIndex index = new JedisIndex(jedis);
-		
-
-		//Do we need to loadIndex?
-		loadIndex(index);
-		
-		//TODO get user input
-		//TODO return random URL from map
-		//Map<String, ArrayList> map = index.getGIFList("input");
-		
-	}
-
-	/**
 	 * Stores two pages in the index for testing purposes.
 	 * 
 	 * 
