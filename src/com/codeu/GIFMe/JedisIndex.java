@@ -96,26 +96,29 @@ public class JedisIndex {
 		return url;
 	}
 
-	/**
-	 * Looks up a term and returns a map from term to ArrayList of GIF URLs.
-	 * 
-	 * @param term
-	 * @return Map from URL to count.
-	 */
-	public Map<String, ArrayList> getGIFList(String term) {
-		Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-		Set<String> urls = getGIFURLs(term);
-		ArrayList<String> GIFlist = new ArrayList<String>();
-		for (String url: urls) {
-			//Adds URL to ArrayList
-			GIFlist.add(url);
-		}
-		//Puts the ArrayList of GIF URLs to the keyword/term
-		map.put(term, GIFlist);
-		//TODO push map to Redis?
-		return map;
-	}
+	
 
+
+
+	public List<Object> pushTermCounterToRedis(TermCounter tc) {
+		Transaction t = jedis.multi();
+		
+		String url = tc.getLabel();
+		String hashname = termCounterKey(url);
+		
+		// if this page has already been indexed; delete the old hash
+		t.del(hashname);
+
+		// for each term, add an entry in the termcounter and a new
+		// member of the index
+		for (String term: tc.keySet()) {
+			Integer count = tc.get(term);
+			t.hset(hashname, term, count.toString());
+			t.sadd(urlSetKey(term), url);
+		}
+		List<Object> res = t.exec();
+		return res;
+	}
 
 	/**
 	 * Prints the contents of the index.

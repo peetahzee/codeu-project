@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Random;
+import java.util.Scanner;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -94,7 +95,10 @@ public class BuzzfeedCrawler {
      */
     void storeGifs(String url, Elements images){
         //get the top 5 keywords on the page
+        //indexes the page
         TermCounter tc = new TermCounter(url);
+        tc.processElements(images);
+        JedisIndex.pushTermCounterToRedis(tc);
         
         
         //store the gif with each keyword
@@ -155,11 +159,12 @@ public class BuzzfeedCrawler {
      * Looks up a term and returns a map from term to ArrayList of GIF URLs.
      * 
      * @param term
-     * @return Map from term to GIF URL
+     * @return Map from URL to count.
      */
     public Map<String, ArrayList> getGIFList(String term) {
         Map<String, ArrayList> map = new HashMap<String, ArrayList>();
         Set<String> urls = getGIFURLs(term);
+
         ArrayList<String> GIFlist = new ArrayList<String>();
         for (String url: urls) {
             //Adds URL to ArrayList
@@ -167,15 +172,21 @@ public class BuzzfeedCrawler {
         }
         //Puts the ArrayList of GIF URLs to the keyword/term
         map.put(term, GIFlist);
-        //TODO push map to Redis?
+        pushMapToRedis(map);
         return map;
+    }
+
+
+    public Map<String, ArrayList> pushMapToRedis(Map<String, ArrayList> map) {
+        
+        
     }
 
 
     /**
     * Returns URL at a random position
     */
-    public String grabRandomURL(ArrayList GIFlist) {
+    public String grabGifURL(ArrayList GIFlist) {
         int size = GIFlist.size();
         Random randomGenerator = new Random();
         int randomPosition = randomGenerator.nextInt(size);
@@ -203,14 +214,17 @@ public class BuzzfeedCrawler {
             // REMOVE THIS BREAK STATEMENT WHEN crawl() IS WORKING
             // break;
         } while (res == null);
-        
-            //TODO get user input
             
-            for each term input {
-               Map<String, ArrayList> map = index.getGifURLs(input); 
+            Scanner reader = new Scanner(System.in);
+            System.out.println("Write a status: ");
+            String input = reader.next();
+            
+            for (String word : input.split(" ")) {
+               Map<String, ArrayList> map = getGifList(word); 
                ArrayList<String> GIFlist = new ArrayList<String>;
-               GIFlist = map.get(input);
-               String gifURL = grabRandomURL(GIFlist);
+               GIFlist = map.get(word);
+               String gifURL = grabGifURL(GIFlist);
+               System.out.println(word + ": " + gifUrl);
             }
 
     
