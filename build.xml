@@ -39,13 +39,33 @@
         </javac>
     </target>
     <target name="BuzzfeedCrawler">
-        <java classname="com.codeu.GIFMe" failonerror="true" fork="yes">
-            <env key="REDISTOGO_AUTH" value="2979811b19fe8895c14425ed5e694107"/>
+        <java classname="com.codeu.GIFMe.BuzzfeedCrawler" failonerror="true" fork="yes">
+            <env key="REDISTOGO_AUTH" value="e99368dabc0dc10a75289a55287e5a81"/>
             <classpath refid="codeu-project.classpath"/>
         </java>
     </target>
     <target name="TermCounter">
-        <java classname="com.codeu.GIFMe" failonerror="true" fork="yes">
+        <java classname="com.codeu.GIFMe.TermCounter" failonerror="true" fork="yes">
+            <classpath refid="codeu-project.classpath"/>
+        </java>
+    </target>
+    <target name="BuzzfeedFetcher">
+        <java classname="com.codeu.GIFMe.BuzzfeedFetcher" failonerror="true" fork="yes">
+            <classpath refid="codeu-project.classpath"/>
+        </java>
+    </target>
+    <target name="WikiNodeIterable">
+        <java classname="com.codeu.GIFMe.WikiNodeIterable" failonerror="true" fork="yes">
+            <classpath refid="codeu-project.classpath"/>
+        </java>
+    </target>
+    <target name="JedisIndex">
+        <java classname="com.codeu.GIFMe.JedisIndex" failonerror="true" fork="yes">
+            <classpath refid="codeu-project.classpath"/>
+        </java>
+    </target>
+    <target name="JedisMaker">
+        <java classname="com.codeu.GIFMe.JedisMaker" failonerror="true" fork="yes">
             <classpath refid="codeu-project.classpath"/>
         </java>
     </target>
