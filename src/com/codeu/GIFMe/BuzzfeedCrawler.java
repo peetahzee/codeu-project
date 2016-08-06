@@ -224,6 +224,5 @@ public class BuzzfeedCrawler {
                System.out.println(word + ": " + gifUrl);
                jedis.set(word, gifUrl);
             }
-        }
     }
 }
