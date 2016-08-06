@@ -61,6 +61,17 @@ public class JedisIndex {
 		return "TermCounter:" + url;
 	}
 
+	/**
+	 * Returns TermCounter keys for the URLS that have been indexed.
+	 * 
+	 * Should be used for development and testing, not production.
+	 * 
+	 * @return
+	 */
+	public Set<String> termCounterKeys() {
+		return jedis.keys("TermCounter:*");
+	}
+
 	
 	
 	/**
@@ -257,7 +268,7 @@ public class JedisIndex {
 
 		String source = "https://www.buzzfeed.com";
 		Elements paragraphs = bf.fetchBuzzfeed(source);
-		index.indexPage(source, paragraphs);
+		//index.indexPage(source, paragraphs);
 		
 		
 	}
