@@ -57,7 +57,7 @@ public class BuzzfeedFetcher {
 		Document doc = Jsoup.parse(stream, "UTF-8", filename);
 		
 		//select all of the images on the page
-		Element images = doc.select(“img”);
+		Element images = doc.select("img");
 
 		//Element content = doc.getElementById("mw-content-text");
 		//Elements paras = content.select("img[src~=(?i)\\.(gif)]");//ALSO include "video" tag

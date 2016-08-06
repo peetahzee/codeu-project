@@ -103,8 +103,8 @@ public class BuzzfeedCrawler {
         
         //store the gif with each keyword
         for(Element el : images){
-            String url = el.attribute(“src”);
-            if(url.contains(“gif”)){
+            String url = el.attribute("src");
+            if(url.contains("gif")){
                 for(int i = 0; i < 5; ++i){     
                     jedis.add(terms[i], url);
                 }
@@ -218,14 +218,12 @@ public class BuzzfeedCrawler {
             
             for (String word : input.split(" ")) {
                Map<String, ArrayList> map = getGifList(word); 
-               ArrayList<String> GIFlist = new ArrayList<String>;
+               ArrayList<String> GIFlist = new ArrayList<String>();
                GIFlist = map.get(word);
                String gifURL = grabGifURL(GIFlist);
                System.out.println(word + ": " + gifUrl);
                jedis.set(word, gifUrl);
             }
-
-    
         }
     }
 }
