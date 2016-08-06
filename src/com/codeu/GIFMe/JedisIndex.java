@@ -48,7 +48,7 @@ public class JedisIndex {
 	 * 
 	 * @return Redis key.
 	 */
-	private String urlSetKey(String term) {
+	public String urlSetKey(String term) {
 		return "URLSet:" + term;
 	}
 	

@@ -10,11 +10,13 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 
 
 public class BuzzfeedCrawler {
@@ -147,12 +149,13 @@ public class BuzzfeedCrawler {
      * @param gifURL
      */
     public void addGifURL(String term, String gifURL) {
-        jedis.sadd(urlSetKey(term), gifURL);
+        index.add(index.urlSetKey(term), gifURL);
     }
 
 
     public Set<String> getGifURLs(String term) {
-        Set<String> set = jedis.smembers(urlSetKey(term));
+        //Set<String> set = index.smembers(index.urlSetKey(term));
+        Set<String> set = index.getGifURLs(term);
         return set;
     }
 
@@ -164,18 +167,20 @@ public class BuzzfeedCrawler {
      * @param term
      * @return Map from URL to count.
      */
-    public Map<String, ArrayList> getGIFList(String term) {
+    public static Map<String, ArrayList> getGIFList(String term) {
         Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-        Set<String> urls = getGIFURLs(term);
+        Set<String> urls = new HashSet<String>();
+        urls = getGifURLs(term);
 
         ArrayList<String> GIFlist = new ArrayList<String>();
         for (String url: urls) {
             //Adds URL to ArrayList
             GIFlist.add(url);
+            //index.set(term, url);
         }
         //Puts the ArrayList of GIF URLs to the keyword/term
         map.put(term, GIFlist);
-        jedis.set(term, GIFlist);
+        //index.set(term, GIFlist);
         return map;
     }
 
@@ -186,7 +191,7 @@ public class BuzzfeedCrawler {
     /**
     * Returns URL at a random position
     */
-    public String grabGifURL(ArrayList GIFlist) {
+    public static String grabGifURL(ArrayList<String> GIFlist) {
         int size = GIFlist.size();
         Random randomGenerator = new Random();
         int randomPosition = randomGenerator.nextInt(size);
@@ -220,7 +225,8 @@ public class BuzzfeedCrawler {
             String input = reader.next();
             
             for (String word : input.split(" ")) {
-               Map<String, ArrayList> map = getGifList(word); 
+               Map<String, ArrayList> map = new HashMap<String, ArrayList>();
+               map = getGIFList(word); 
                ArrayList<String> GIFlist = new ArrayList<String>();
                GIFlist = map.get(word);
                String gifURL = grabGifURL(GIFlist);
