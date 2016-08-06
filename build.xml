@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="build" name="JavaCS">
+<project basedir="." default="build" name="codeu">
     <property environment="env"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
-    <path id="JavaCS.classpath">
+    <path id="codeu-project.classpath">
         <pathelement location="bin"/>
         <pathelement location="lib/jedis-2.8.0.jar"/>
         <pathelement location="lib/jsoup-1.8.3.jar"/>
@@ -35,18 +35,18 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="JavaCS.classpath"/>
+            <classpath refid="codeu-project.classpath"/>
         </javac>
     </target>
-    <target name="WikiCrawler">
-        <java classname="com.flatironschool.javacs.WikiCrawler" failonerror="true" fork="yes">
+    <target name="BuzzfeedCrawler">
+        <java classname="com.codeu.GIFMe" failonerror="true" fork="yes">
             <env key="REDISTOGO_AUTH" value="2979811b19fe8895c14425ed5e694107"/>
-            <classpath refid="JavaCS.classpath"/>
+            <classpath refid="codeu-project.classpath"/>
         </java>
     </target>
     <target name="TermCounter">
-        <java classname="com.flatironschool.javacs.TermCounter" failonerror="true" fork="yes">
-            <classpath refid="JavaCS.classpath"/>
+        <java classname="com.codeu.GIFMe" failonerror="true" fork="yes">
+            <classpath refid="codeu-project.classpath"/>
         </java>
     </target>
 </project>

@@ -71,7 +71,7 @@ public class JedisMaker {
 			System.out.println("on port " + port);
 			System.out.println("with authcode " + auth);
 			System.out.println("Got exception " + e);
-			printInstructions();
+			//printInstructions();
 			return null;
 		}
 		return jedis;
