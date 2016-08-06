@@ -218,7 +218,7 @@ public class BuzzfeedCrawler {
             
             for (String word : input.split(" ")) {
                Map<String, ArrayList> map = getGifList(word); 
-               ArrayList<String> GIFlist = new ArrayList<String>;
+               ArrayList<String> GIFlist = new ArrayList<String>();
                GIFlist = map.get(word);
                String gifURL = grabGifURL(GIFlist);
                System.out.println(word + ": " + gifUrl);
