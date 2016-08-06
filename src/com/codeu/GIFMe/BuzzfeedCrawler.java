@@ -7,6 +7,9 @@ import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
