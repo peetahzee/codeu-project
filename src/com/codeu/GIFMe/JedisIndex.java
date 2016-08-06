@@ -132,6 +132,19 @@ public class JedisIndex {
 	}
 
 	/**
+	 * Returns the number of times the given term appears at the given URL.
+	 * 
+	 * @param url
+	 * @param term
+	 * @return
+	 */
+	public Integer getCount(String url, String term) {
+		String redisKey = termCounterKey(url);
+		String count = jedis.hget(redisKey, term);
+		return new Integer(count);
+	}
+
+	/**
 	 * Prints the contents of the index.
 	 * 
 	 * Should be used for development and testing, not production.
@@ -142,7 +155,7 @@ public class JedisIndex {
 			System.out.println(term);
 			
 			// for each term, print the pages where it appears
-			Set<String> urls = getURLs(term);
+			Set<String> urls = getGifURLs(term);
 			for (String url: urls) {
 				Integer count = getCount(url, term);
 				System.out.println("    " + url + " " + count);
