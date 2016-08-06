@@ -104,7 +104,7 @@ public class BuzzfeedCrawler {
         //store the gif with each keyword
         for(Element el : images){
             String url = el.attribute(“src”);
-            if(url.contains(“gif”){
+            if(url.contains(“gif”)){
                 for(int i = 0; i < 5; ++i){     
                     jedis.add(terms[i], url);
                 }
