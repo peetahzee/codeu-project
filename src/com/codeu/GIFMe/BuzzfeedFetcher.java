@@ -31,10 +31,10 @@ public class BuzzfeedFetcher {
 		Document doc = conn.get();
 
 		// select the content text and pull out the paragraphs.
-		Element content = doc.getElementById("mw-content-text");
+		Element content = doc.getElementById("buzz_sub_buzz");
 
 		// TODO: avoid selecting paragraphs from sidebars and boxouts
-		Elements paras = content.select("img[src~=(?i)\\.(gif)]");//ALSO include "video" tag
+		Elements paras = content.select("p");
 		return paras;
 	}
 

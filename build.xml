@@ -40,7 +40,7 @@
     </target>
     <target name="BuzzfeedCrawler">
         <java classname="com.codeu.GIFMe.BuzzfeedCrawler" failonerror="true" fork="yes">
-            <env key="REDISTOGO_AUTH" value="e99368dabc0dc10a75289a55287e5a81"/>
+            <env key="REDISTOGO_AUTH" value="c4844aa1e90201f6fdf9d187312e070a"/>
             <classpath refid="codeu-project.classpath"/>
         </java>
     </target>
