@@ -84,28 +84,28 @@ public class JedisIndex {
 		return set;
 	}
 
-	/**
-	 * Looks up a search term and returns one gif for a term
-	 * 
-	 * @param term
-	 * @return one Gif URL
-	 */
-	public String getGif(String term) {
-		Set<String> set = getGifURLs(term);
-		String url = "";
+	// /**
+	//  * Looks up a search term and returns one gif for a term
+	//  * 
+	//  * @param term
+	//  * @return one Gif URL
+	//  */
+	// public String getGif(String term) {
+	// 	Set<String> set = getGifURLs(term);
+	// 	String url = "";
 
-		//get a random integer from the Set
-		Random rand = new Random();
-		int index = rand.nextInt(set.size());
+	// 	//get a random integer from the Set
+	// 	Random rand = new Random();
+	// 	int index = rand.nextInt(set.size());
 
-		//go through the set and find the random gif
-		Iterator<Strings> it = set.iterator();
-		for(int i = 0; i < index; ++i){
-			url = it.next();
-		}
+	// 	//go through the set and find the random gif
+	// 	Iterator<Strings> it = set.iterator();
+	// 	for(int i = 0; i < index; ++i){
+	// 		url = it.next();
+	// 	}
 
-		return url;
-	}
+	// 	return url;
+	// }
 
 	
 

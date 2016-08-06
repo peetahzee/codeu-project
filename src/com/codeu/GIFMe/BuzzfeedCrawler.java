@@ -167,7 +167,7 @@ public class BuzzfeedCrawler {
      * @param term
      * @return Map from URL to count.
      */
-    public static Map<String, ArrayList> getGIFList(String term) {
+    public Map<String, ArrayList> getGIFList(String term) {
         Map<String, ArrayList> map = new HashMap<String, ArrayList>();
         Set<String> urls = new HashSet<String>();
         urls = getGifURLs(term);
@@ -191,7 +191,7 @@ public class BuzzfeedCrawler {
     /**
     * Returns URL at a random position
     */
-    public static String grabGifURL(ArrayList<String> GIFlist) {
+    public String grabGifURL(ArrayList<String> GIFlist) {
         int size = GIFlist.size();
         Random randomGenerator = new Random();
         int randomPosition = randomGenerator.nextInt(size);
@@ -226,12 +226,12 @@ public class BuzzfeedCrawler {
             
             for (String word : input.split(" ")) {
                Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-               map = getGIFList(word); 
+               map = wc.getGIFList(word); 
                ArrayList<String> GIFlist = new ArrayList<String>();
                GIFlist = map.get(word);
-               String gifURL = grabGifURL(GIFlist);
-               System.out.println(word + ": " + gifUrl);
-               jedis.set(word, gifUrl);
+               String gifURL = wc.grabGifURL(GIFlist);
+               System.out.println(word + ": " + gifURL);
+               jedis.set(word, gifURL);
             }
     }
 }
