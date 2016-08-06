@@ -193,6 +193,10 @@ public class BuzzfeedCrawler {
     */
     public String grabGifURL(ArrayList<String> GIFlist) {
         int size = GIFlist.size();
+        if(size == 0){
+            String temp = "No URL found";
+            return temp;
+        }
         Random randomGenerator = new Random();
         int randomPosition = randomGenerator.nextInt(size);
         return GIFlist.get(randomPosition);
@@ -222,9 +226,13 @@ public class BuzzfeedCrawler {
             
             Scanner reader = new Scanner(System.in);
             System.out.println("Write a status: ");
-            String input = reader.next();
+            String input = reader.nextLine();
+            System.out.println("input: " + input);
+            String[] words = input.split("\\s+");
+
             
-            for (String word : input.split(" ")) {
+            for (int i = 0; i < words.length; ++i) {
+               String word = words[i];
                Map<String, ArrayList> map = new HashMap<String, ArrayList>();
                map = wc.getGIFList(word); 
                ArrayList<String> GIFlist = new ArrayList<String>();

@@ -115,6 +115,7 @@ public class TermCounter {
 	 */
 	public void put(String term, int count) {
 		map.put(term, count);
+		System.out.println(term);
 		for(int i = 0; i < 5; ++i){
            	if(keywords[i] == null){
            		keywords[i] = term;
