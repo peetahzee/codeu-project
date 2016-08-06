@@ -69,8 +69,8 @@ public class JedisIndex {
 	 * @param term
 	 * @param tc
 	 */
-	public void add(String term, TermCounter tc) {
-		jedis.sadd(urlSetKey(term), tc.getLabel());
+	public void add(String term, String url) {
+		jedis.sadd(urlSetKey(term), url);
 	}
 
 	/**

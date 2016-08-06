@@ -33,6 +33,15 @@ public class TermCounter {
 	public String getLabel() {
 		return label;
 	}
+
+	/**
+	 * Returns keywords array
+	 * 
+	 * @return
+	 */
+	public String[] getKeywords(){
+		return keywords;
+	}
 	
 	/**
 	 * Returns the total of all counts.
