@@ -67,7 +67,7 @@ public class BuzzfeedCrawler {
         }
         //get the next url from the queue
         String url = queue.poll();
-        
+        //System.out.println(url);
         //makes sure the url hasn't been indexed
         if(testing == false && index.isIndexed(url)){
             return null;
@@ -79,14 +79,16 @@ public class BuzzfeedCrawler {
         }else{//get the contents from the web
             paragraph = wf.fetchBuzzfeed(url);
         }
-        
+        System.out.println(paragraph);
+        //add all other internal links to the queue
+        queueInternalLinks(paragraph);
+
         storeGifs(url, paragraph);
         
         // index the page
         //index.indexPage(url, paragraph);
         
-        //add all other internal links to the queue
-        queueInternalLinks(paragraph);
+        
         
         //return the url that was indexed
         return url;
@@ -212,8 +214,8 @@ public class BuzzfeedCrawler {
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
         // for testing purposes, load up the queue
-        Elements paragraphs = wf.fetchBuzzfeed(source);
-        wc.queueInternalLinks(paragraphs);
+        // Elements paragraphs = wf.fetchBuzzfeed(source);
+        // wc.queueInternalLinks(paragraphs);
         
         // loop until we index a new page
         String res;

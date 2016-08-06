@@ -34,7 +34,7 @@ public class BuzzfeedFetcher {
 		Element content = doc.getElementById("buzz_sub_buzz");
 
 		// TODO: avoid selecting paragraphs from sidebars and boxouts
-		Elements paras = content.select("img");
+		Elements paras = content.select("p");
 		return paras;
 	}
 
