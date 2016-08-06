@@ -31,6 +31,17 @@ public class JedisIndex {
 	public JedisIndex(Jedis jedis) {
 		this.jedis = jedis;
 	}
+
+	/**
+	 * Checks whether we have a TermCounter for a given URL.
+	 * 
+	 * @param url
+	 * @return
+	 */
+	public boolean isIndexed(String url) {
+		String redisKey = termCounterKey(url);
+		return jedis.exists(redisKey);
+	}
 	
 	/**
 	 * Returns the Redis key for a given search term.

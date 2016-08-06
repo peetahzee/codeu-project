@@ -81,7 +81,7 @@ public class BuzzfeedCrawler {
         storeGifs(url, paragraph);
         
         // index the page
-        index.indexPage(url, paragraph);
+        //index.indexPage(url, paragraph);
         
         //add all other internal links to the queue
         queueInternalLinks(paragraph);
@@ -101,15 +101,15 @@ public class BuzzfeedCrawler {
         //indexes the page
         TermCounter tc = new TermCounter(url);
         tc.processElements(images);
-        JedisIndex.pushTermCounterToRedis(tc);
+        index.pushTermCounterToRedis(tc);
         
         
         //store the gif with each keyword
         for(Element el : images){
-            String url = el.attribute("src");
+            String gifURL = el.attribute("src");
             if(url.contains("gif")){
                 for(int i = 0; i < 5; ++i){     
-                    jedis.add(terms[i], url);
+                    jedis.add(terms[i], gifURL);
                 }
             }
         }
