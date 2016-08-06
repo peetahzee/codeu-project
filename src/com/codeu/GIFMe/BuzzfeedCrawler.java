@@ -136,7 +136,7 @@ public class BuzzfeedCrawler {
             {
                 url = link.attr("href");
                 if (url.startsWith("/buzzfeed/"))
-                    queue.add("https://buzzfeed.com" + url);
+                    queue.add("https://www.buzzfeed.com" + url);
             }
         }
     }

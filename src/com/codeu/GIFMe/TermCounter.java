@@ -116,7 +116,10 @@ public class TermCounter {
 	public void put(String term, int count) {
 		map.put(term, count);
 		for(int i = 0; i < 5; ++i){
-           	if(map.get(term) > map.get(keywords[i])){
+           	if(keywords[i] == null){
+           		keywords[i] = term;
+           		break;
+           	}else if(map.get(term) > map.get(keywords[i])){
             	keywords[i] = term;
                	break;
             }
