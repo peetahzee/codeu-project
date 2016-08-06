@@ -172,15 +172,12 @@ public class BuzzfeedCrawler {
         }
         //Puts the ArrayList of GIF URLs to the keyword/term
         map.put(term, GIFlist);
-        pushMapToRedis(map);
+        jedis.set(term, GIFlist);
         return map;
     }
 
 
-    public Map<String, ArrayList> pushMapToRedis(Map<String, ArrayList> map) {
-        
-        
-    }
+
 
 
     /**
@@ -225,6 +222,7 @@ public class BuzzfeedCrawler {
                GIFlist = map.get(word);
                String gifURL = grabGifURL(GIFlist);
                System.out.println(word + ": " + gifUrl);
+               jedis.set(word, gifUrl);
             }
 
     
