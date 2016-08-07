@@ -29,13 +29,22 @@ public class BuzzfeedFetcher {
 		// download and parse the document
 		Connection conn = Jsoup.connect(url);
 		Document doc = conn.get();
-
 		// select the content text and pull out the paragraphs.
-		Element content = doc.getElementById("buzz_sub_buzz");
+		if (url.contains("search")) {
+			Element content = doc.getElementById();
 
-		// TODO: avoid selecting paragraphs from sidebars and boxouts
-		Elements paras = content.select("p");
-		return paras;
+			// TODO: avoid selecting paragraphs from sidebars and boxouts
+			Elements links = content.select();
+			return links;
+
+		}
+		else {
+			Element content = doc.getElementById("buzz_sub_buzz");
+
+			// TODO: avoid selecting paragraphs from sidebars and boxouts
+			Elements captions = content.select("h2");
+			return captions;
+		}
 	}
 
 	/**

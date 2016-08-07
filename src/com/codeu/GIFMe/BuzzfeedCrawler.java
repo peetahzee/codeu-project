@@ -62,9 +62,11 @@ public class BuzzfeedCrawler {
      */
     public String crawl(boolean testing) throws IOException {
         //didn't index a page
+        
         if(queue.isEmpty()){
             return null;
         }
+        System.out.println("test2");
         //get the next url from the queue
         String url = queue.poll();
         //System.out.println(url);
@@ -79,7 +81,7 @@ public class BuzzfeedCrawler {
         }else{//get the contents from the web
             paragraph = wf.fetchBuzzfeed(url);
         }
-        System.out.println(paragraph);
+        //System.out.println(paragraph);
         //add all other internal links to the queue
         queueInternalLinks(paragraph);
 
@@ -210,7 +212,7 @@ public class BuzzfeedCrawler {
         // make a BuzzfeedCrawler
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
-        String source = "https://www.buzzfeed.com/juliegerstein/heres-how-you-can-fold-basically-everything-better?utm_term=.oieaapZKe#.ao1LL3vqw";
+        String source = "https://www.buzzfeed.com/search?q=gif";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
         // for testing purposes, load up the queue
