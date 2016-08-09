@@ -11,7 +11,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
 public class BuzzfeedFetcher {
 	private long lastRequestTime = -1;
 	private long minInterval = 1000;
@@ -78,13 +77,7 @@ public class BuzzfeedFetcher {
 		Document doc = conn.get();
 		// select the content text and pull out the paragraphs.
 		
-			Element content = doc.getElementById("search2_results");
-			System.out.println(content);
-
-			// TODO: avoid selecting paragraphs from sidebars and boxouts
-			Elements links = content.select("h2");
-			//System.out.println(captions);
-			return links;
+		return doc.getElementsByTag("a");
 		
 	}
 

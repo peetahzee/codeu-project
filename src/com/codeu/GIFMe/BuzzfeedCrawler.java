@@ -87,9 +87,10 @@ public class BuzzfeedCrawler {
          //     return null;
          // }
         
-        Elements paragraph;
+        // nextPageLinks = list of <a>
+        Elements nextPageLinks;
         //if(testing){//get the contents of the url from the file
-            paragraph = wf.readBuzzfeed(url);
+            nextPageLinks = wf.readBuzzfeed(url);
     
             if (images) {
                 
@@ -105,7 +106,7 @@ public class BuzzfeedCrawler {
         //System.out.println(paragraph);
         //add all other internal links to the queue
         if (images) {
-            queueInternalLinks(paragraph);
+            queueInternalLinks(nextPageLinks);
         }
 
         if (images && captions != null && links != null) {
@@ -164,24 +165,19 @@ public class BuzzfeedCrawler {
      * @param paragraphs
      */
     // NOTE: absence of access level modifier means package-level
-    void queueInternalLinks(Elements paragraphs) {
+    void queueInternalLinks(Elements urlLinks) {
         System.out.println("Queuing links");
         String url;
-        Elements urlLinks;
         //System.out.println(paragraphs);
-        for (Element paragraph : paragraphs)
-        {
-            urlLinks = paragraph.select("a[href]");
-
-            
             //if it's an internal link it adds it to the queue
             for (Element link : urlLinks)
             {
                 url = link.attr("href");
-                if (url.startsWith("/buzzfeed/"))
+                System.out.println(url);
+                //url.startsWith("/buzzfeed/") &&
+                if (!url.contains("webappstatic") && url.startsWith("/"))
                     queue.add("https://www.buzzfeed.com" + url);
             }
-        }
     }
 
 
@@ -260,7 +256,7 @@ public class BuzzfeedCrawler {
         JedisIndex index = new JedisIndex(jedis);
         index.deleteURLSets();
         //queueBuzzfeed();
-        String source = "https://www.buzzfeed.com/search?q=gif";
+        String source = "https://www.buzzfeed.com/matthewchampion/this-british-scientist-was-shocked-to-see-his-gif-appear-in?utm_term=.xmGXXdJOK#.uey22gl9o";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
         // for testing purposes, load up the queue
