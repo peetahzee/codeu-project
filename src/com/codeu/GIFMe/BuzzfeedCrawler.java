@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.lang.String;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -85,13 +86,13 @@ public class BuzzfeedCrawler {
         }else{//get the contents from the web
             System.out.println("else");
             if (images) {
-                System.out.println("getting links");
-                links = wf.fetchBuzzfeed(url, images);  
                 
+                links = wf.fetchBuzzfeed(url, images);  
+                //System.out.println(links);
             }
             else {
                 captions = wf.fetchBuzzfeed(url, images);
-                System.out.println(captions);
+                //System.out.println(captions);
             }
             
         }
@@ -125,15 +126,22 @@ public class BuzzfeedCrawler {
         TermCounter tc = new TermCounter(url);
         tc.processElements(gifCaptions);
         index.pushTermCounterToRedis(tc);
-        
+        //
         
         //store the gif with each keyword
         for(Element el : gifLinks){
-            String gifURL = el.attr("src");
-            if(url.contains("gif")){
-                for(int i = 0; i < 5; ++i){     
-                    index.add(tc.getKeywords()[i], gifURL);
-                }
+            if (el.hasAttr("rel:bf_image_src")) {
+                //System.out.println(el);
+                String gifURL = el.attr("rel:bf_image_src");
+                System.out.println(gifURL);
+                
+                    ArrayList<String> keywords = new ArrayList<String>();
+                    keywords = tc.getKeywords();
+                    for(int i = 0; i < keywords.size(); i++){     
+                        //System.out.println(keywords.get(i) + " put to " + gifURL);
+                        index.add(keywords.get(i), gifURL);
+                    }
+                
             }
         }
     }

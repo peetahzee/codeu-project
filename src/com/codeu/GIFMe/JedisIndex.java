@@ -60,7 +60,7 @@ public class JedisIndex {
 	 * @return Redis key.
 	 */
 	private String termCounterKey(String url) {
-		System.out.println("termCounterKey");
+		//System.out.println("termCounterKey");
 		return "TermCounter:" + url;
 	}
 

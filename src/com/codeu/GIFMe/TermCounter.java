@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
@@ -22,12 +23,12 @@ public class TermCounter {
 	
 	private Map<String, Integer> map;
 	private String label;
-	private String[] keywords;
+	private ArrayList<String> keywords;
 	
 	public TermCounter(String label) {
 		this.label = label;
 		this.map = new HashMap<String, Integer>();
-		this.keywords = new String[5];
+		this.keywords = new ArrayList<String>();
 	}
 	
 	public String getLabel() {
@@ -39,7 +40,7 @@ public class TermCounter {
 	 * 
 	 * @return
 	 */
-	public String[] getKeywords(){
+	public ArrayList<String> getKeywords(){
 		return keywords;
 	}
 	
@@ -80,7 +81,7 @@ public class TermCounter {
 		for (Node node: new WikiNodeIterable(root)) {
 			//System.out.println("wiki node");
 			if (node instanceof TextNode) {
-				System.out.println("if statement");
+				//System.out.println("if statement");
 				processText(((TextNode) node).text());
 			}
 		}
@@ -92,7 +93,7 @@ public class TermCounter {
 	 * @param text  The text to process.
 	 */
 	public void processText(String text) {
-		System.out.println("process text");
+		//System.out.println("process text");
 		// replace punctuation with spaces, convert to lower case, and split on whitespace
 		String[] array = text.replaceAll("\\pP", " ").toLowerCase().split("\\s+");
 		//System.out.println("text: " + text);
@@ -120,16 +121,17 @@ public class TermCounter {
 	 */
 	public void put(String term, int count) {
 		map.put(term, count);
-		System.out.println(term);
-		for(int i = 0; i < 5; ++i){
-           	if(keywords[i] == null){
-           		keywords[i] = term;
-           		break;
-           	}else if(map.get(term) > map.get(keywords[i])){
-            	keywords[i] = term;
-               	break;
-            }
-        }
+		keywords.add(term);
+		//System.out.println(term);
+		// for(int i = 0; i < 5; ++i){
+  //          	if(keywords[i] == null){
+  //          		keywords[i] = term;
+  //          		break;
+  //          	}else if(map.get(term) > map.get(keywords[i])){
+  //           	keywords[i] = term;
+  //              	break;
+  //           }
+  //       }
 	}
 
 	/**
