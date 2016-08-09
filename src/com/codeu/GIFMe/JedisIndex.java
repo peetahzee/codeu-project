@@ -53,6 +53,10 @@ public class JedisIndex {
 	public String urlSetKey(String term) {
 		return "URLSet:" + term;
 	}
+
+	public String urlListKey(String term) {
+		return "URLList:" + term;
+	}
 	
 	/**
 	 * Returns the Redis key for a URL's TermCounter.
@@ -76,8 +80,21 @@ public class JedisIndex {
 	}
 
 
-	public void pushMap (String term, String url) {
-		jedis.sadd(urlSetKey(term), url);
+	public void pushMap (ArrayList<String> keywords, ArrayList<String> urls) {
+		//System.out.println("Adding " + url + " to " + urlListKey(term));
+		Transaction trans = jedis.multi();
+		System.out.println("# URLS: " + urls.size());
+		System.out.println("# keywords: " + keywords.size());
+		for (String url : urls) {
+			for (String keyword : keywords) {
+				if (keyword.length() < 4) { continue; }
+				url = url.replace("https://img.buzzfeed.com/buzzfeed-static/static/", ""); 
+				// System.out.println("keyword: " + keyword + " | url: " + url);
+				trans.lpush(urlListKey(keyword), url);
+			}
+		}
+		trans.exec();
+		
 		//jedis.sadd(term, url);
 	}
 	
@@ -98,9 +115,9 @@ public class JedisIndex {
 	 * @param term
 	 * @return Set of URLs.
 	 */
-	public Set<String> getGifURLs(String term) {
-		Set<String> set = jedis.smembers(urlSetKey(term));
-		return set;
+	public List<String> getGifURLs(String term) {
+		List<String> list = jedis.mget(urlListKey(term));
+		return list;
 	}
 
 	// /**
@@ -172,7 +189,7 @@ public class JedisIndex {
 			System.out.println(term);
 			
 			// for each term, print the pages where it appears
-			Set<String> urls = getGifURLs(term);
+			List<String> urls = getGifURLs(term);
 			for (String url: urls) {
 				Integer count = getCount(url, term);
 				System.out.println("    " + url + " " + count);
@@ -209,7 +226,7 @@ public class JedisIndex {
 	 * @return
 	 */
 	public Set<String> urlSetKeys() {
-		return jedis.keys("URLSet:*");
+		return jedis.keys("*");
 	}
 
 	
@@ -225,6 +242,7 @@ public class JedisIndex {
 		Set<String> keys = urlSetKeys();
 		Transaction t = jedis.multi();
 		for (String key: keys) {
+			System.out.println("deleting " + key);
 			t.del(key);
 		}
 		t.exec();

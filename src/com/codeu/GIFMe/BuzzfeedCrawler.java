@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.lang.String;
+import java.util.List;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -124,25 +125,28 @@ public class BuzzfeedCrawler {
         //get the top 5 keywords on the page
         //indexes the page
         TermCounter tc = new TermCounter(url);
-        //tc.processElements(gifCaptions);
+        tc.processElements(gifCaptions);
                 //
         
+        ArrayList<String> urls = new ArrayList<String>();
         //store the gif with each keyword
         for(Element el : gifLinks){
             if (el.hasAttr("rel:bf_image_src")) {
                 //System.out.println(el);
                 String gifURL = el.attr("rel:bf_image_src");
-                System.out.println(gifURL);
-                
-                    ArrayList<String> keywords = new ArrayList<String>();
-                    keywords = tc.getKeywords();
-                    for(int i = 0; i < keywords.size(); i++){     
+                //System.out.println(gifURL);
+                urls.add(gifURL);
+                    
+
+                    //for(int i = 0; i < keywords.size(); i++){     
                         //System.out.println(keywords.get(i) + " put to " + gifURL);
-                        index.pushMap(keywords.get(i), gifURL);
-                    }
+                        //index.pushMap(keywords, gifURL);
+                    //}
                 
             }
         }
+        ArrayList<String> keywords = tc.getKeywords();
+            index.pushMap(keywords, urls); 
     }
 
     
@@ -181,10 +185,10 @@ public class BuzzfeedCrawler {
     }
 
 
-    public Set<String> getGifURLs(String term) {
+    public List<String> getGifURLs(String term) {
         //Set<String> set = index.smembers(index.urlSetKey(term));
-        Set<String> set = index.getGifURLs(term);
-        return set;
+        List<String> list = index.getGifURLs(term);
+        return list;
     }
 
 
@@ -197,7 +201,7 @@ public class BuzzfeedCrawler {
      */
     public Map<String, ArrayList> getGIFList(String term) {
         Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-        Set<String> urls = new HashSet<String>();
+        List<String> urls = new ArrayList<String>();
         urls = getGifURLs(term);
 
         ArrayList<String> GIFlist = new ArrayList<String>();
@@ -219,15 +223,19 @@ public class BuzzfeedCrawler {
     /**
     * Returns URL at a random position
     */
-    public String grabGifURL(ArrayList<String> GIFlist) {
-        int size = GIFlist.size();
-        if(size == 0){
+    public String grabGifURL(String term, Jedis jedis) {
+        
+        Long length = jedis.llen(index.urlListKey(term));
+        //System.out.println(length);
+
+        if(length == 0){
             String temp = "No URL found";
             return temp;
         }
+        int i = (int) (long) length;
         Random randomGenerator = new Random();
-        int randomPosition = randomGenerator.nextInt(size);
-        return GIFlist.get(randomPosition);
+        long randomPosition = randomGenerator.nextInt(i);
+        return jedis.lindex(index.urlListKey(term), 0);
     }
 
 
@@ -238,7 +246,8 @@ public class BuzzfeedCrawler {
         // make a BuzzfeedCrawler
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
-        //index.deleteURLSets();
+        index.deleteURLSets();
+
         String source = "https://www.buzzfeed.com/juliegerstein/heres-how-you-can-fold-basically-everything-better?utm_term=.bkNg49qOz#.cfbO30Pnv";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
@@ -270,9 +279,9 @@ public class BuzzfeedCrawler {
                map = wc.getGIFList(word); 
                ArrayList<String> GIFlist = new ArrayList<String>();
                GIFlist = map.get(word);
-               String gifURL = wc.grabGifURL(GIFlist);
+               String gifURL = wc.grabGifURL(word, jedis);
                System.out.println(word + ": " + gifURL);
-               jedis.set(word, gifURL);
+               
             }
     }
 }
