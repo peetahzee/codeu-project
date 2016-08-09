@@ -23,28 +23,29 @@ public class BuzzfeedFetcher {
 	 * @return
 	 * @throws IOException
 	 */
-	public Elements fetchBuzzfeed(String url) throws IOException {
+	public Elements fetchBuzzfeed(String url, boolean images) throws IOException {
 		sleepIfNeeded();
 
 		// download and parse the document
 		Connection conn = Jsoup.connect(url);
 		Document doc = conn.get();
 		// select the content text and pull out the paragraphs.
-		// if (url.contains("search")) {
-		// 	Element content = doc.getElementById();
-
-		// 	// TODO: avoid selecting paragraphs from sidebars and boxouts
-		// 	Elements links = content.select();
-		// 	return links;
-
-		// }
-		// else {
+		if (images) {
 			Element content = doc.getElementById("buzz_sub_buzz");
 
 			// TODO: avoid selecting paragraphs from sidebars and boxouts
-			Elements captions = content.select("img[src~=(?i)\\.(gif)]");
+			Elements gifLinks = content.select("img");
+			//System.out.println(captions);
+			return gifLinks;
+		}
+		else {
+			Element content = doc.getElementById("buzz_sub_buzz");
+
+			// TODO: avoid selecting paragraphs from sidebars and boxouts
+			Elements captions = content.select("h2");
+			//System.out.println(captions);
 			return captions;
-		//}
+		}
 	}
 
 	/**

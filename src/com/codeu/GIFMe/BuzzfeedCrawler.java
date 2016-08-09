@@ -83,7 +83,7 @@ public class BuzzfeedCrawler {
         }
         System.out.println(paragraph);
         //add all other internal links to the queue
-        queueInternalLinks(paragraph);
+        //queueInternalLinks(paragraph);
 
         storeGifs(url, paragraph);
         
