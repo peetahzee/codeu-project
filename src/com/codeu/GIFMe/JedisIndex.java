@@ -39,9 +39,9 @@ public class JedisIndex {
 	 * @return
 	 */
 	public boolean isIndexed(String url) {
-		System.out.println("isIndexed");
+		//System.out.println("isIndexed");
 		String redisKey = termCounterKey(url);
-		System.out.println(jedis.exists(redisKey));
+		//System.out.println(jedis.exists(redisKey));
 		return jedis.exists(redisKey);
 	}
 	
@@ -75,6 +75,11 @@ public class JedisIndex {
 		return jedis.keys("TermCounter:*");
 	}
 
+
+	public void pushMap (String term, String url) {
+		jedis.sadd(urlSetKey(term), url);
+		//jedis.sadd(term, url);
+	}
 	
 	
 	/**
@@ -120,8 +125,6 @@ public class JedisIndex {
 
 	// 	return url;
 	// }
-
-	
 
 
 

@@ -76,9 +76,9 @@ public class BuzzfeedCrawler {
         queue.offer(url);
         System.out.println(url);
         //makes sure the url hasn't been indexed
-        // if(testing == false && index.isIndexed(url) && !images){
-        //     return null;
-        // }
+         // if(testing == false && index.isIndexed(url) && !images){
+         //     return null;
+         // }
         
         Elements paragraph;
         if(testing){//get the contents of the url from the file
@@ -124,9 +124,8 @@ public class BuzzfeedCrawler {
         //get the top 5 keywords on the page
         //indexes the page
         TermCounter tc = new TermCounter(url);
-        tc.processElements(gifCaptions);
-        index.pushTermCounterToRedis(tc);
-        //
+        //tc.processElements(gifCaptions);
+                //
         
         //store the gif with each keyword
         for(Element el : gifLinks){
@@ -139,7 +138,7 @@ public class BuzzfeedCrawler {
                     keywords = tc.getKeywords();
                     for(int i = 0; i < keywords.size(); i++){     
                         //System.out.println(keywords.get(i) + " put to " + gifURL);
-                        index.add(keywords.get(i), gifURL);
+                        index.pushMap(keywords.get(i), gifURL);
                     }
                 
             }
@@ -209,7 +208,7 @@ public class BuzzfeedCrawler {
         }
         //Puts the ArrayList of GIF URLs to the keyword/term
         map.put(term, GIFlist);
-        //index.set(term, GIFlist);
+        
         return map;
     }
 
@@ -230,6 +229,8 @@ public class BuzzfeedCrawler {
         int randomPosition = randomGenerator.nextInt(size);
         return GIFlist.get(randomPosition);
     }
+
+
     
 
     public static void main(String[] args) throws IOException {
@@ -237,7 +238,7 @@ public class BuzzfeedCrawler {
         // make a BuzzfeedCrawler
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
-        index.deleteURLSets();
+        //index.deleteURLSets();
         String source = "https://www.buzzfeed.com/juliegerstein/heres-how-you-can-fold-basically-everything-better?utm_term=.bkNg49qOz#.cfbO30Pnv";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
