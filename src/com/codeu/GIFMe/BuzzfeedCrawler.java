@@ -73,8 +73,10 @@ public class BuzzfeedCrawler {
         }
         System.out.println("test2");
         //get the next url from the queue
-        String url = queue.poll();
-        queue.offer(url);
+        if (images) {
+            String url = queue.poll();
+        }
+        
         System.out.println(url);
         //makes sure the url hasn't been indexed
          // if(testing == false && index.isIndexed(url) && !images){
@@ -82,10 +84,9 @@ public class BuzzfeedCrawler {
          // }
         
         Elements paragraph;
-        if(testing){//get the contents of the url from the file
+        //if(testing){//get the contents of the url from the file
             paragraph = wf.readBuzzfeed(url);
-        }else{//get the contents from the web
-            System.out.println("else");
+    
             if (images) {
                 
                 links = wf.fetchBuzzfeed(url, images);  
@@ -96,12 +97,12 @@ public class BuzzfeedCrawler {
                 //System.out.println(captions);
             }
             
-        }
+        //}
         //System.out.println(paragraph);
         //add all other internal links to the queue
-        //queueInternalLinks(paragraph);
+        queueInternalLinks(paragraph);
 
-        if (images) {
+        if (images && captions != "no keywords" && links != "no links") {
             storeGifs(url, captions, links);
         }
         
@@ -134,8 +135,9 @@ public class BuzzfeedCrawler {
             if (el.hasAttr("rel:bf_image_src")) {
                 //System.out.println(el);
                 String gifURL = el.attr("rel:bf_image_src");
-                //System.out.println(gifURL);
-                urls.add(gifURL);
+                if (gifURL.contains(".gif")) {
+                    urls.add(gifURL);
+                }
                     
 
                     //for(int i = 0; i < keywords.size(); i++){     
@@ -239,6 +241,7 @@ public class BuzzfeedCrawler {
     }
 
 
+
     
 
     public static void main(String[] args) throws IOException {
@@ -247,8 +250,8 @@ public class BuzzfeedCrawler {
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
         index.deleteURLSets();
-
-        String source = "https://www.buzzfeed.com/juliegerstein/heres-how-you-can-fold-basically-everything-better?utm_term=.bkNg49qOz#.cfbO30Pnv";
+        //queueBuzzfeed();
+        String source = "https://www.buzzfeed.com/search?q=gif";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
         // for testing purposes, load up the queue

@@ -39,6 +39,9 @@ public class BuzzfeedFetcher {
 			// TODO: avoid selecting paragraphs from sidebars and boxouts
 			Elements gifLinks = content.select("img");
 			//System.out.println(captions);
+			if (gifLinks == null) {
+				return "no links";
+			}
 			return gifLinks;
 		}
 		else {
@@ -48,6 +51,9 @@ public class BuzzfeedFetcher {
 			// TODO: avoid selecting paragraphs from sidebars and boxouts
 			Elements captions = content.select("h2");
 			//System.out.println(captions);
+			if (captions == null) {
+				return "no keywords";
+			}
 			return captions;
 		}
 	}
@@ -60,22 +66,22 @@ public class BuzzfeedFetcher {
 	 * @throws IOException
 	 */
 	public Elements readBuzzfeed(String url) throws IOException {
-		URL realURL = new URL(url);
+		System.out.println("in RF");
+		sleepIfNeeded();
 
-		// assemble the file name
-		String slash = File.separator;
-		String filename = "resources" + slash + realURL.getHost() + realURL.getPath();
-
-		// read the file
-		InputStream stream = BuzzfeedFetcher.class.getClassLoader().getResourceAsStream(filename);
-		Document doc = Jsoup.parse(stream, "UTF-8", filename);
+		// download and parse the document
 		
-		//select all of the images on the page
-		Elements images = doc.select("img");
+		Connection conn = Jsoup.connect(url);
+		Document doc = conn.get();
+		// select the content text and pull out the paragraphs.
+		
+			Element content = doc.getElementById("search2_results");
 
-		//Element content = doc.getElementById("mw-content-text");
-		//Elements paras = content.select("img[src~=(?i)\\.(gif)]");//ALSO include "video" tag
-		return images;
+			// TODO: avoid selecting paragraphs from sidebars and boxouts
+			Elements links = content.select("h2");
+			//System.out.println(captions);
+			return links;
+		}
 	}
 
 
