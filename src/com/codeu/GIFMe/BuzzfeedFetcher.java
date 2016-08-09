@@ -42,7 +42,7 @@ public class BuzzfeedFetcher {
 			Element content = doc.getElementById("buzz_sub_buzz");
 
 			// TODO: avoid selecting paragraphs from sidebars and boxouts
-			Elements captions = content.select("img");
+			Elements captions = content.select("img[src~=(?i)\\.(gif)]");
 			return captions;
 		//}
 	}

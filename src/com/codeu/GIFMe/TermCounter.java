@@ -78,7 +78,7 @@ public class TermCounter {
 		// NOTE: we could use select to find the TextNodes, but since
 		// we already have a tree iterator, let's use it.
 		for (Node node: new WikiNodeIterable(root)) {
-			System.out.println("wiki node");
+			//System.out.println("wiki node");
 			if (node instanceof TextNode) {
 				System.out.println("if statement");
 				processText(((TextNode) node).text());

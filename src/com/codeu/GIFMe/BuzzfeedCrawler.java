@@ -69,7 +69,7 @@ public class BuzzfeedCrawler {
         System.out.println("test2");
         //get the next url from the queue
         String url = queue.poll();
-        //System.out.println(url);
+        System.out.println(url);
         //makes sure the url hasn't been indexed
         if(testing == false && index.isIndexed(url)){
             return null;
@@ -81,7 +81,7 @@ public class BuzzfeedCrawler {
         }else{//get the contents from the web
             paragraph = wf.fetchBuzzfeed(url);
         }
-        //System.out.println(paragraph);
+        System.out.println(paragraph);
         //add all other internal links to the queue
         queueInternalLinks(paragraph);
 
