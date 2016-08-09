@@ -37,24 +37,27 @@ public class BuzzfeedFetcher {
 			Element content = doc.getElementById("buzz_sub_buzz");
 
 			// TODO: avoid selecting paragraphs from sidebars and boxouts
-			Elements gifLinks = content.select("img");
+			if (content != null) {
+				Elements gifLinks = content.select("img");
 			//System.out.println(captions);
-			if (gifLinks == null) {
-				return "no links";
+			
+				return gifLinks;
 			}
-			return gifLinks;
+			return null;
 		}
 		else {
 
 			Element content = doc.getElementById("buzz_sub_buzz");
 
 			// TODO: avoid selecting paragraphs from sidebars and boxouts
-			Elements captions = content.select("h2");
-			//System.out.println(captions);
-			if (captions == null) {
-				return "no keywords";
+			if (content != null) {
+
+				Elements captions = content.select("h2");
+				return captions;
 			}
-			return captions;
+			//System.out.println(captions);
+		return null;
+			
 		}
 	}
 
@@ -76,12 +79,13 @@ public class BuzzfeedFetcher {
 		// select the content text and pull out the paragraphs.
 		
 			Element content = doc.getElementById("search2_results");
+			System.out.println(content);
 
 			// TODO: avoid selecting paragraphs from sidebars and boxouts
 			Elements links = content.select("h2");
 			//System.out.println(captions);
 			return links;
-		}
+		
 	}
 
 

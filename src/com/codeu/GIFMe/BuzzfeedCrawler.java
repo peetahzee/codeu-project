@@ -71,13 +71,17 @@ public class BuzzfeedCrawler {
         if(queue.isEmpty()){
             return null;
         }
-        System.out.println("test2");
+        //System.out.println("test2");
         //get the next url from the queue
-        if (images) {
-            String url = queue.poll();
+        String url;
+        if (!images) {
+            url = queue.peek();
+        }
+        else {
+            url = queue.poll();
         }
         
-        System.out.println(url);
+        //System.out.println(url);
         //makes sure the url hasn't been indexed
          // if(testing == false && index.isIndexed(url) && !images){
          //     return null;
@@ -100,9 +104,11 @@ public class BuzzfeedCrawler {
         //}
         //System.out.println(paragraph);
         //add all other internal links to the queue
-        queueInternalLinks(paragraph);
+        if (images) {
+            queueInternalLinks(paragraph);
+        }
 
-        if (images && captions != "no keywords" && links != "no links") {
+        if (images && captions != null && links != null) {
             storeGifs(url, captions, links);
         }
         
@@ -159,11 +165,14 @@ public class BuzzfeedCrawler {
      */
     // NOTE: absence of access level modifier means package-level
     void queueInternalLinks(Elements paragraphs) {
+        System.out.println("Queuing links");
         String url;
         Elements urlLinks;
+        //System.out.println(paragraphs);
         for (Element paragraph : paragraphs)
         {
             urlLinks = paragraph.select("a[href]");
+
             
             //if it's an internal link it adds it to the queue
             for (Element link : urlLinks)
