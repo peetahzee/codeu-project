@@ -212,7 +212,7 @@ public class BuzzfeedCrawler {
         // make a BuzzfeedCrawler
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
-        String source = "https://www.buzzfeed.com/search?q=gif";
+        String source = "https://www.buzzfeed.com/juliegerstein/heres-how-you-can-fold-basically-everything-better?utm_term=.bkNg49qOz#.cfbO30Pnv";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
         // for testing purposes, load up the queue
