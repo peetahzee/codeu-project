@@ -24,12 +24,15 @@ public class BuzzfeedFetcher {
 	 * @throws IOException
 	 */
 	public Elements fetchBuzzfeed(String url, boolean images) throws IOException {
+		System.out.println("in BF");
 		sleepIfNeeded();
 
 		// download and parse the document
+		
 		Connection conn = Jsoup.connect(url);
 		Document doc = conn.get();
 		// select the content text and pull out the paragraphs.
+		
 		if (images) {
 			Element content = doc.getElementById("buzz_sub_buzz");
 
@@ -39,6 +42,7 @@ public class BuzzfeedFetcher {
 			return gifLinks;
 		}
 		else {
+
 			Element content = doc.getElementById("buzz_sub_buzz");
 
 			// TODO: avoid selecting paragraphs from sidebars and boxouts

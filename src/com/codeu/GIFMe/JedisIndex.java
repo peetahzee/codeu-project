@@ -39,7 +39,9 @@ public class JedisIndex {
 	 * @return
 	 */
 	public boolean isIndexed(String url) {
+		System.out.println("isIndexed");
 		String redisKey = termCounterKey(url);
+		System.out.println(jedis.exists(redisKey));
 		return jedis.exists(redisKey);
 	}
 	
@@ -58,6 +60,7 @@ public class JedisIndex {
 	 * @return Redis key.
 	 */
 	private String termCounterKey(String url) {
+		System.out.println("termCounterKey");
 		return "TermCounter:" + url;
 	}
 
@@ -267,7 +270,7 @@ public class JedisIndex {
 		BuzzfeedFetcher bf = new BuzzfeedFetcher();
 
 		String source = "https://www.buzzfeed.com";
-		Elements paragraphs = bf.fetchBuzzfeed(source);
+		//Elements paragraphs = bf.fetchBuzzfeed(source);
 		//index.indexPage(source, paragraphs);
 		
 		

@@ -25,6 +25,9 @@ public class BuzzfeedCrawler {
     
     // the index where the results go
     private JedisIndex index;
+
+    public static Elements links;
+    public static Elements captions;
     
     // queue of URLs to be indexed
     private Queue<String> queue = new LinkedList<String>();
@@ -60,7 +63,7 @@ public class BuzzfeedCrawler {
      * @return Number of pages indexed.
      * @throws IOException
      */
-    public String crawl(boolean testing) throws IOException {
+    public String crawl(boolean testing, boolean images) throws IOException {
         //didn't index a page
         
         if(queue.isEmpty()){
@@ -69,23 +72,36 @@ public class BuzzfeedCrawler {
         System.out.println("test2");
         //get the next url from the queue
         String url = queue.poll();
+        queue.offer(url);
         System.out.println(url);
         //makes sure the url hasn't been indexed
-        if(testing == false && index.isIndexed(url)){
-            return null;
-        }
+        // if(testing == false && index.isIndexed(url) && !images){
+        //     return null;
+        // }
         
         Elements paragraph;
         if(testing){//get the contents of the url from the file
             paragraph = wf.readBuzzfeed(url);
         }else{//get the contents from the web
-            paragraph = wf.fetchBuzzfeed(url);
+            System.out.println("else");
+            if (images) {
+                System.out.println("getting links");
+                links = wf.fetchBuzzfeed(url, images);  
+                
+            }
+            else {
+                captions = wf.fetchBuzzfeed(url, images);
+                System.out.println(captions);
+            }
+            
         }
-        System.out.println(paragraph);
+        //System.out.println(paragraph);
         //add all other internal links to the queue
         //queueInternalLinks(paragraph);
 
-        storeGifs(url, paragraph);
+        if (images) {
+            storeGifs(url, captions, links);
+        }
         
         // index the page
         //index.indexPage(url, paragraph);
@@ -93,6 +109,7 @@ public class BuzzfeedCrawler {
         
         
         //return the url that was indexed
+        //System.out.println("returned");
         return url;
     }
     
@@ -102,16 +119,16 @@ public class BuzzfeedCrawler {
      *
      * @param url
      */
-    void storeGifs(String url, Elements images){
+    void storeGifs(String url, Elements gifCaptions, Elements gifLinks){
         //get the top 5 keywords on the page
         //indexes the page
         TermCounter tc = new TermCounter(url);
-        tc.processElements(images);
+        tc.processElements(gifCaptions);
         index.pushTermCounterToRedis(tc);
         
         
         //store the gif with each keyword
-        for(Element el : images){
+        for(Element el : gifLinks){
             String gifURL = el.attr("src");
             if(url.contains("gif")){
                 for(int i = 0; i < 5; ++i){     
@@ -212,6 +229,7 @@ public class BuzzfeedCrawler {
         // make a BuzzfeedCrawler
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
+        index.deleteURLSets();
         String source = "https://www.buzzfeed.com/juliegerstein/heres-how-you-can-fold-basically-everything-better?utm_term=.bkNg49qOz#.cfbO30Pnv";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
         
@@ -222,7 +240,9 @@ public class BuzzfeedCrawler {
         // loop until we index a new page
         String res;
         do {
-            res = wc.crawl(false);
+            res = wc.crawl(false, false);
+            res = wc.crawl(false, true);
+            //wc.storeGifs(res, wc.captions, wc.links);
             
             // REMOVE THIS BREAK STATEMENT WHEN crawl() IS WORKING
             // break;
