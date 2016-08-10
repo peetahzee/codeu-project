@@ -23,13 +23,22 @@ public class BuzzfeedFetcher {
 	 * @throws IOException
 	 */
 	public Elements fetchBuzzfeed(String url, boolean images) throws IOException {
-		System.out.println("in BF");
+		//System.out.println("in BF");
 		sleepIfNeeded();
 
 		// download and parse the document
 		
 		Connection conn = Jsoup.connect(url);
-		Document doc = conn.get();
+		Document doc;
+		try {
+			doc = conn.get();
+		
+			
+		
+		} catch (Exception e) {
+
+			return new Elements();
+		}
 		// select the content text and pull out the paragraphs.
 		
 		if (images) {
@@ -68,16 +77,22 @@ public class BuzzfeedFetcher {
 	 * @throws IOException
 	 */
 	public Elements readBuzzfeed(String url) throws IOException {
-		System.out.println("in RF");
+		//System.out.println("in RF");
 		sleepIfNeeded();
 
 		// download and parse the document
 		
 		Connection conn = Jsoup.connect(url);
-		Document doc = conn.get();
-		// select the content text and pull out the paragraphs.
+		try {
+			Document doc = conn.get();
 		
-		return doc.getElementsByTag("a");
+			return doc.getElementsByTag("a");
+		
+		} catch (Exception e) {
+
+			return new Elements();
+		}
+		// select the content text and pull out the paragraphs.
 		
 	}
 
