@@ -225,6 +225,7 @@ public class BuzzfeedCrawler {
         
         Long length = jedis.llen(index.urlListKey(term));
         //System.out.println(length);
+        System.out.println(term + ": " + length + " results found.");
 
         if(length == 0){
             String temp = "No URL found";
@@ -233,7 +234,7 @@ public class BuzzfeedCrawler {
         int i = (int) (long) length;
         Random randomGenerator = new Random();
         long randomPosition = randomGenerator.nextInt(i);
-        return jedis.lindex(index.urlListKey(term), 0);
+        return jedis.lindex(index.urlListKey(term), randomPosition);
     }
 
 
@@ -245,7 +246,7 @@ public class BuzzfeedCrawler {
         // make a BuzzfeedCrawler
         Jedis jedis = JedisMaker.make();
         JedisIndex index = new JedisIndex(jedis);
-        index.deleteURLSets();
+        //index.deleteURLSets();
         //queueBuzzfeed();
         String source = "https://www.buzzfeed.com/matthewchampion/this-british-scientist-was-shocked-to-see-his-gif-appear-in?utm_term=.xmGXXdJOK#.uey22gl9o";
         BuzzfeedCrawler wc = new BuzzfeedCrawler(source, index);
@@ -255,48 +256,48 @@ public class BuzzfeedCrawler {
         // wc.queueInternalLinks(paragraphs);
         
         // loop until we index a new page
-        String res;
-        do {
+        // String res;
+        // do {
             
-            //System.out.println("test2");
-            //get the next url from the queue
-            Random randomGenerator = new Random();
-            long randomPosition = randomGenerator.nextInt(wc.queue.size());
-            String url = wc.queue.get((int) (long) randomPosition);
+        //     //System.out.println("test2");
+        //     //get the next url from the queue
+        //     Random randomGenerator = new Random();
+        //     long randomPosition = randomGenerator.nextInt(wc.queue.size());
+        //     String url = wc.queue.get((int) (long) randomPosition);
             
-            System.out.println(url);
+        //     System.out.println(url);
 
-            res = wc.crawl(false, false, url);
-            res = wc.crawl(false, true, url);
-            //wc.storeGifs(res, wc.captions, wc.links);
+        //     res = wc.crawl(false, false, url);
+        //     res = wc.crawl(false, true, url);
+        //     //wc.storeGifs(res, wc.captions, wc.links);
             
-            // REMOVE THIS BREAK STATEMENT WHEN crawl() IS WORKING
-            // break;
-        } while (true);
+        //     // REMOVE THIS BREAK STATEMENT WHEN crawl() IS WORKING
+        //     // break;
+        // } while (true);
             
-            // Scanner reader = new Scanner(System.in);
-            // System.out.println("Write a status: ");
-            // String input = reader.nextLine();
-            // System.out.println("input: " + input);
-            // String[] words = input.split("\\s+");
+            Scanner reader = new Scanner(System.in);
+            System.out.println("Write a status: ");
+            String input = reader.nextLine();
+            System.out.println("input: " + input);
+            String[] words = input.split("\\s+");
 
             
-            // for (int i = 0; i < words.length; ++i) {
-            //    String word = words[i];
-            //    //Map<String, ArrayList> map = new HashMap<String, ArrayList>();
-            //    //map = wc.getGIFList(word); 
-            //    //ArrayList<String> GIFlist = new ArrayList<String>();
-            //    //GIFlist = map.get(word);
-            //    String gifURL = wc.grabGifURL(word, jedis);
-            //    if (gifURL != "No URL found") {
-            //      System.out.println(word + ": img.buzzfeed.com/buzzfeed-static/static/" + gifURL);
-            //    }
-            //    else {
-            //        System.out.println(gifURL);
-            //     }
+            for (int i = 0; i < words.length; ++i) {
+               String word = words[i];
+               //Map<String, ArrayList> map = new HashMap<String, ArrayList>();
+               //map = wc.getGIFList(word); 
+               //ArrayList<String> GIFlist = new ArrayList<String>();
+               //GIFlist = map.get(word);
+               String gifURL = wc.grabGifURL(word, jedis);
+               if (gifURL != "No URL found") {
+                 System.out.println("img.buzzfeed.com/buzzfeed-static/static/" + gifURL);
+               }
+               else {
+                   System.out.println(gifURL);
+                }
 
                
-            // }
+            }
             
     }
 }
